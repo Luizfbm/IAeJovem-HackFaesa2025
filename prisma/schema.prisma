@@ -1,0 +1,251 @@
+generator client {
+    provider = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+    output = "/home/ubuntu/iaejovem/nextjs_space/node_modules/.prisma/client"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+// Enum para os tipos de usuário
+enum UserRole {
+  ALUNO
+  PROFESSOR
+  ADMINISTRADOR
+}
+
+// Enum para as séries
+enum Serie {
+  SEXTO_ANO
+  SETIMO_ANO
+  OITAVO_ANO
+  NONO_ANO
+  PRIMEIRO_EM
+  SEGUNDO_EM
+  TERCEIRO_EM
+}
+
+// Enum para as turmas
+enum Turma {
+  A
+  B
+  C
+}
+
+// Enum para status de resgates
+enum RedemptionStatus {
+  AGUARDANDO_RETIRADA
+  ENTREGUE
+}
+
+// Tabela principal de usuários
+model User {
+  id             String    @id @default(cuid())
+  name           String
+  matricula      String    @unique
+  email          String    @unique
+  password       String
+  role           UserRole
+  serie          Serie?
+  turma          Turma?
+  photo          String?
+  points         Int       @default(0)
+  termsAccepted  Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  // Relacionamentos
+  conversations    Conversation[]
+  scores          Score[]
+  redemptions     Redemption[]
+  teacherNotes    Note[]        @relation("TeacherNotes")
+  studentNotes    Note[]        @relation("StudentNotes")
+  teacherAssignments Assignment[] @relation("TeacherAssignments")
+  studentAssignments Assignment[] @relation("StudentAssignments")
+  notifications   Notification[]
+
+  @@map("users")
+}
+
+// Tabela de conversas com a Ayla
+model Conversation {
+  id              String   @id @default(cuid())
+  userId          String
+  messages        Json     // Armazena array de mensagens da conversa
+  score           Float?   // Score emocional calculado (0-10)
+  duration        Int      // Duração em segundos
+  emocao          String?  // Emoção predominante detectada
+  sentimentoScore Float?   // Score de sentimento (-1 a 1)
+  createdAt       DateTime @default(now())
+
+  // Relacionamentos
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scores Score[]
+
+  @@map("conversations")
+}
+
+// Tabela de scores emocionais
+model Score {
+  id             String   @id @default(cuid())
+  userId         String
+  conversationId String
+  score          Float    // Score de 0 a 10
+  createdAt      DateTime @default(now())
+
+  // Relacionamentos
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@map("scores")
+}
+
+// Tabela de produtos da loja
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  pointsCost  Int
+  stock       Int      @default(0)
+  image       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relacionamentos
+  redemptions Redemption[]
+
+  @@map("products")
+}
+
+// Tabela de resgates de produtos
+model Redemption {
+  id        String           @id @default(cuid())
+  userId    String
+  productId String
+  code      String           @unique // Código único do resgate
+  status    RedemptionStatus @default(AGUARDANDO_RETIRADA)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  // Relacionamentos
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("redemptions")
+}
+
+// Tabela de anotações dos professores sobre alunos
+model Note {
+  id        String   @id @default(cuid())
+  teacherId String
+  studentId String
+  note      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamentos
+  teacher User @relation("TeacherNotes", fields: [teacherId], references: [id], onDelete: Cascade)
+  student User @relation("StudentNotes", fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@map("notes")
+}
+
+// Tabela de atribuições de alunos para professores
+model Assignment {
+  id        String   @id @default(cuid())
+  teacherId String
+  studentId String
+  createdAt DateTime @default(now())
+
+  // Relacionamentos
+  teacher User @relation("TeacherAssignments", fields: [teacherId], references: [id], onDelete: Cascade)
+  student User @relation("StudentAssignments", fields: [studentId], references: [id], onDelete: Cascade)
+
+  // Um aluno só pode ter um professor
+  @@unique([studentId])
+  @@map("assignments")
+}
+
+// Tabela de notificações
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  // Relacionamentos
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+// Enum para tipos de ações de auditoria
+enum AuditAction {
+  LOGIN
+  LOGOUT
+  CREATE_USER
+  UPDATE_USER
+  DELETE_USER
+  CREATE_PRODUCT
+  UPDATE_PRODUCT
+  DELETE_PRODUCT
+  REDEEM_PRODUCT
+  ASSIGN_STUDENT
+  UNASSIGN_STUDENT
+  ADJUST_POINTS
+  ARCHIVE_YEAR
+  RESTORE_ARCHIVE
+  VIEW_STUDENT_DATA
+  GENERATE_REPORT
+  BULK_ACTION
+}
+
+// Tabela de log de auditoria
+model AuditLog {
+  id          String      @id @default(cuid())
+  userId      String
+  action      AuditAction
+  description String
+  metadata    Json?       // Dados adicionais da ação
+  ipAddress   String?
+  createdAt   DateTime    @default(now())
+
+  @@map("audit_logs")
+}
+
+// Tabela de ajustes manuais de pontos
+model PointAdjustment {
+  id          String   @id @default(cuid())
+  userId      String   // Aluno que teve os pontos ajustados
+  adminId     String   // Administrador que fez o ajuste
+  points      Int      // Quantidade de pontos (positivo ou negativo)
+  reason      String   // Justificativa do ajuste
+  createdAt   DateTime @default(now())
+
+  @@map("point_adjustments")
+}
+
+// Enum para status de arquivo
+enum ArchiveStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+// Tabela de arquivamento de ano letivo
+model YearArchive {
+  id             String        @id @default(cuid())
+  year           Int           // Ano letivo (ex: 2025)
+  description    String?       // Descrição opcional
+  status         ArchiveStatus @default(ACTIVE)
+  archivedAt     DateTime?     // Data do arquivamento
+  archivedBy     String?       // ID do administrador que arquivou
+  totalStudents  Int           @default(0)
+  totalPoints    Int           @default(0)
+  totalConversations Int       @default(0)
+  createdAt      DateTime      @default(now())
+
+  @@map("year_archives")
+}

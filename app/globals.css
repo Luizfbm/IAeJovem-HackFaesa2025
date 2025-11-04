@@ -1,0 +1,156 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Paleta IAeJovem */
+    --iaj-blue: 213 92% 58%;      /* #2563EB - azul-royal */
+    --iaj-pink: 327 84% 58%;      /* #EC4899 - rosa-magenta */
+    --iaj-green: 160 84% 39%;     /* #10B981 - verde-menta */
+    --iaj-purple: 258 90% 66%;    /* #8B5CF6 - roxo-lilás */
+    
+    /* Theme colors - Light Mode */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: var(--iaj-blue);
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: var(--iaj-pink);
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: var(--iaj-blue);
+    --radius: 0.75rem;
+  }
+  
+  .dark {
+    /* Dark Mode Colors */
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 8%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 8%;
+    --popover-foreground: 210 40% 98%;
+    --primary: var(--iaj-blue);
+    --primary-foreground: 210 40% 98%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: var(--iaj-pink);
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: var(--iaj-blue);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Cores personalizadas do IAeJovem */
+@layer utilities {
+  .text-iaj-blue { color: hsl(var(--iaj-blue)); }
+  .text-iaj-pink { color: hsl(var(--iaj-pink)); }
+  .text-iaj-green { color: hsl(var(--iaj-green)); }
+  .text-iaj-purple { color: hsl(var(--iaj-purple)); }
+  
+  .bg-iaj-blue { background-color: hsl(var(--iaj-blue)); }
+  .bg-iaj-pink { background-color: hsl(var(--iaj-pink)); }
+  .bg-iaj-green { background-color: hsl(var(--iaj-green)); }
+  .bg-iaj-purple { background-color: hsl(var(--iaj-purple)); }
+  
+  .border-iaj-blue { border-color: hsl(var(--iaj-blue)); }
+  .border-iaj-pink { border-color: hsl(var(--iaj-pink)); }
+  .border-iaj-green { border-color: hsl(var(--iaj-green)); }
+  .border-iaj-purple { border-color: hsl(var(--iaj-purple)); }
+
+  /* Gradientes suaves */
+  .gradient-iaj-blue { background: linear-gradient(135deg, hsl(var(--iaj-blue) / 0.1), hsl(var(--iaj-blue) / 0.05)); }
+  .gradient-iaj-pink { background: linear-gradient(135deg, hsl(var(--iaj-pink) / 0.1), hsl(var(--iaj-pink) / 0.05)); }
+  .gradient-iaj-green { background: linear-gradient(135deg, hsl(var(--iaj-green) / 0.1), hsl(var(--iaj-green) / 0.05)); }
+  
+  /* Sombras personalizadas */
+  .shadow-iaj { box-shadow: 0 4px 20px -4px hsl(var(--iaj-blue) / 0.1); }
+  .shadow-iaj-hover { box-shadow: 0 8px 30px -4px hsl(var(--iaj-blue) / 0.15); }
+  
+  /* Animações suaves */
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out;
+  }
+  
+  .animate-slide-up {
+    animation: slide-up 0.6s ease-out;
+  }
+  
+  .animate-scale-in {
+    animation: scale-in 0.4s ease-out;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--iaj-blue) / 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--iaj-blue) / 0.5);
+}

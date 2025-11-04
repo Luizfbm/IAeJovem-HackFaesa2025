@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <rect width="256" height="256" fill="#ffffff"/>
+  <text x="128" y="160" font-family="Arial, sans-serif" font-size="120" font-weight="bold" text-anchor="middle" fill="#2563EB">I</text>
+  <text x="128" y="160" font-family="Arial, sans-serif" font-size="120" font-weight="bold" text-anchor="middle" fill="#EC4899" opacity="0.9" transform="translate(40, 0)">A</text>
+  <text x="128" y="160" font-family="Arial, sans-serif" font-size="120" font-weight="bold" text-anchor="middle" fill="#2563EB" transform="translate(75, 0)">J</text>
+  <circle cx="128" cy="200" r="8" fill="#EC4899"/>
+</svg>
