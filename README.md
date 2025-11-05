@@ -2,7 +2,7 @@
 # 💙 IAeJovem (IAJ) - Plataforma de Apoio Emocional para Estudantes
 
 🌐 **[VER DEMO AO VIVO](iaejovem.abacusai.app)** | 📁 [GitHub](https://github.com/Luizfbm/IAeJovem-HackFaesa2025)
-**IAeJovem (IAJ)** é uma plataforma de apoio emocional inovadora desenvolvida para estudantes, construída em torno de uma IA empática chamada **Ayla**. A plataforma oferece um espaço seguro, acolhedor e confidencial onde os estudantes podem conversar, se expressar e receber apoio emocional. (Link para o projeto: iaejovem.abacusai.app)
+**IAeJovem (IAJ)** é uma plataforma de apoio emocional inovadora desenvolvida para estudantes, construída em torno de uma IA empática chamada **Ayla**. A plataforma oferece um espaço seguro, acolhedor e confidencial onde os estudantes podem conversar, se expressar e receber apoio emocional.
 
 ---
 
